@@ -32,4 +32,4 @@ server:
   port: 8080
 
 authentication:
-  enabled: false
+  enabled: true

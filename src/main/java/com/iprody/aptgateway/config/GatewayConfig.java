@@ -23,15 +23,14 @@ public class GatewayConfig {
 
     @Bean
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
-        // adding 2 rotes to first microservice as we need to log request body if method is POST
         return builder.routes()
-                .route("first-microservice",r -> r.path("/first")
+                .route("first-microservice",r -> r.path("api/payment")
                         .and().method("POST")
                         .and().readBody(Payment.class, s -> true).filters(f -> f.filters(requestFilter, authFilter))
-                        .uri("http://localhost:8082"))
-                .route("first-microservice",r -> r.path("/first")
-                        .and().method("GET").filters(f-> f.filters(authFilter))
                         .uri("http://localhost:8081"))
+                .route("first-microservice",r -> r.path("/api/payment")
+                        .and().method("GET").filters(f-> f.filters(authFilter))
+                        .uri("http://localhost:8081/"))
                 .route("auth-server",r -> r.path("/login")
                         .uri("http://localhost:8088"))
                 .build();

@@ -32,6 +32,7 @@ public class GatewayConfig {
                         .and().method("GET").filters(f-> f.filters(authFilter))
                         .uri("http://localhost:8081/"))
                 .route("auth-server",r -> r.path("/login")
+                        .and().method("POST")
                         .uri("http://localhost:8088"))
                 .build();
     }

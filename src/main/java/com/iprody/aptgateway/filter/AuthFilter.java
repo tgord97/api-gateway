@@ -43,18 +43,9 @@ public class AuthFilter implements GatewayFilter {
 
         if(routeValidator.isSecured.test(request)) {
             System.out.println("validating authentication token");
-            if(this.isCredsMissing(request)) {
-                System.out.println("in error");
-                return this.onError(exchange,"Credentials missing", HttpStatus.UNAUTHORIZED);
-            }
-            if (request.getHeaders().containsKey("userName") && request.getHeaders().containsKey("role")) {
-                token = authUtil.getToken(request.getHeaders().get("userName").toString(), request.getHeaders().get("role").toString());
-            }
-            else {
-                token = request.getHeaders().get("Authorization").toString().split(" ")[1];
-            }
+            token = request.getHeaders().get("Authorization").toString().split(" ")[1];
 
-            if(jwtUtil.isInvalid(token)) {
+            if(authUtil.checkToken(token)) {
                 return this.onError(exchange,"Auth header invalid",HttpStatus.UNAUTHORIZED);
             }
             else {
@@ -78,7 +69,7 @@ public class AuthFilter implements GatewayFilter {
 
 
     private boolean isCredsMissing(ServerHttpRequest request) {
-        return !(request.getHeaders().containsKey("userName") && request.getHeaders().containsKey("role")) && !request.getHeaders().containsKey("Authorization");
+        return !(request.getHeaders().containsKey("username") && request.getHeaders().containsKey("password")) && !request.getHeaders().containsKey("Authorization");
     }
 
     private void populateRequestWithHeaders(ServerWebExchange exchange, String token) {

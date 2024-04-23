@@ -43,7 +43,8 @@ public class AuthFilter implements GatewayFilter {
 
         if(routeValidator.isSecured.test(request)) {
             System.out.println("validating authentication token");
-            token = request.getHeaders().get("Authorization").toString().split(" ")[1];
+//            token = request.getHeaders().get("Authorization").toString().split(" ")[1];
+            token = "dsd";
 
             if(authUtil.checkToken(token)) {
                 return this.onError(exchange,"Auth header invalid",HttpStatus.UNAUTHORIZED);
